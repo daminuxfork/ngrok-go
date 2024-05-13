@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -120,5 +121,7 @@ func marshalYAML(o any) (string, error) {
 }
 
 func unmarshal(input string, typ any) error {
-	return yaml.UnmarshalStrict([]byte(input), typ)
+	decoder := yaml.NewDecoder(strings.NewReader(input))
+	decoder.KnownFields(true)
+	return decoder.Decode(typ)
 }
